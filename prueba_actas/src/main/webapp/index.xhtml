@@ -1,0 +1,182 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>Actas Reuniones</title>
+        <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    </h:head>
+    <h:body>
+        <!--Menu-->
+        <ui:include src="menu/nav.xhtml"/>
+        <!--Fin menu-->
+
+        <div class="container">
+
+            <!--Notificaciones-->
+            <h:form>
+                <p:messages id="messages" autoUpdate="true" showDetail="true" closable="true">
+                </p:messages>
+            </h:form>
+            <!--Fin Notificaciones-->
+
+            <p:dialog header="Participantes" modal="true" widgetVar="addParti">
+                <h:form>
+                    <p:panelGrid columns="2">
+                        <p:outputLabel for="participante" value="Participante: "/>
+                        <p:autoComplete id="participante" dropdown="true" value="#{actaReunionBean.participante}"
+                                        completeMethod="#{participanteBean.resultdataAutoComplete}" var="participantedata"
+                                        itemLabel="#{participantedata.toStringAutoComplete()}" itemValue="#{participantedata}"
+                                        converter="participanteConverter" forceSelection="true" required="true"
+                                        requiredMessage="Es necesario seleccionar un participante">
+                            <p:ajax event="itemSelect" onstart="#{actaReunionBean.participante}"/>
+                        </p:autoComplete>
+                        <p:commandButton value="Agregar" actionListener="#{actaReunionBean.addParticipante}" update="@this :tablaParticipante"/>
+                    </p:panelGrid>
+                </h:form>
+                <p:dataTable value="#{actaReunionBean.actaReunion.participanteList}" id="tablaParticipante" var="participante" emptyMessage="No hay participantes">
+                    <p:column headerText="Primer Nombre">
+                        <p:outputLabel value="#{participante.nombre1}"/>
+                    </p:column>
+                    <p:column headerText="Segundo Nombre">
+                        <p:outputLabel value="#{participante.nombre2}"/>
+                    </p:column>
+                    <p:column headerText="Primer Apellido">
+                        <p:outputLabel value="#{participante.apellido1}"/>
+                    </p:column>
+                    <p:column headerText="Segundo Apellido">
+                        <p:outputLabel value="#{participante.apellido2}"/>
+                    </p:column>
+                </p:dataTable>
+                <h:form>
+                    <p:commandButton value="Listo" onclick="PF('addParti').hide()" process="@this"/>
+                </h:form>
+            </p:dialog>
+            <!--Fin modal-->
+
+            <!--Modal de asignación de compromiso-->
+            <p:dialog modal="true" widgetVar="addRespon" header="Compromisos">
+                <h:form id="formComp">
+                    <p:panelGrid columns="2">
+                        <p:outputLabel for="participante" value="Participante: "/>
+                        <p:autoComplete id="participante" dropdown="true" value="#{actaReunionBean.compromiso.participanteIdparticipante}"
+                                        completeMethod="#{participanteBean.resultdataAutoComplete}" var="participantecomdata"
+                                        itemLabel="#{participantecomdata.toStringAutoComplete()}" itemValue="#{participantecomdata}"
+                                        converter="participanteConverter" forceSelection="true" required="true"
+                                        requiredMessage="Es necesario seleccionar un participante">
+                            <p:ajax event="itemSelect" onstart="#{actaReunionBean.compromiso.participanteIdparticipante}"/>
+                        </p:autoComplete>
+                        <p:outputLabel for="compromiso" value="Compromiso: "/>
+                        <p:inputTextarea id="compromiso" value="#{actaReunionBean.compromiso.compromiso}" required="true" requiredMessage="Es necesario ingresar un compromiso"/>
+                        <p:commandButton value="Agregar" update="@this :formComp :tablaCompromiso" actionListener="#{actaReunionBean.addCompromiso}"/>
+                    </p:panelGrid>
+                </h:form>
+                <p:dataTable id="tablaCompromiso" value="#{actaReunionBean.actaReunion.compromisoList}" var="compromiso" emptyMessage="No hay compromiso asignados">
+                    <p:column headerText="Participante">
+                        <p:outputLabel value="#{compromiso.participanteIdparticipante.toStringAutoComplete()}"/>
+                    </p:column>
+                    <p:column headerText="Compromiso">
+                        <p:outputLabel value="#{compromiso.compromiso}"/>
+                    </p:column>
+                </p:dataTable>
+                <h:form>
+                    <p:commandButton value="Listo" onclick="PF('addRespon').hide()" process="@this"/>
+                </h:form>
+            </p:dialog>
+
+            <!--Modal acta de reunion-->
+            <p:dialog header="Acta de Reunión" modal="true" widgetVar="crearActa">
+                <h:form>
+                    <p:panelGrid columns="2">
+                        <p:outputLabel for="proyecto" value="Proyecto: "/>
+                        <p:autoComplete id="proyecto" dropdown="true" value="#{actaReunionBean.actaReunion.proyectoIdproyecto}" 
+                                        completeMethod="#{proyectoBean.resultdataAutoComplete}" var="proyectodata" 
+                                        itemLabel="#{proyectodata.toStringAutoComplete()}" itemValue="#{proyectodata}"
+                                        converter="proyectoConverter" forceSelection="true" required="true" 
+                                        requiredMessage="Es necesario seleccionar un proyecto">
+                            <p:ajax event="itemSelect" onstart="#{actaReunionBean.actaReunion.proyectoIdproyecto}"/>
+                        </p:autoComplete>
+                        <p:outputLabel for="fecha" value="Fecha: "/>
+                        <p:calendar value="#{actaReunionBean.actaReunion.fecha}" required="true" requiredMessage="Es necesario ingresar la fecha de realizacion del acta" id="fecha"/>
+                        <p:outputLabel for="ubicacion" value="Ubicación: "/>
+                        <p:inputText id="ubicacion" value="#{actaReunionBean.actaReunion.ubicacion}" required="true" requiredMessage="Es necesario ingresar la ubicación de la reunión"/>
+                        <p:outputLabel for="contenidos" value="Contenidos: "/>
+                        <p:inputTextarea id="contenidos" value="#{actaReunionBean.actaReunion.contenidos}" required="true" requiredMessage="Es necesario ingresar el contenido de la reunión"/>
+                        <p:outputLabel for="fecha_proxima_reunion" value="Fecha próxima reunión: "/>
+                        <p:calendar id="fecha_proxima_reunion" value="#{actaReunionBean.actaReunion.fechaProximaReunion}" required="true" requiredMessage="Es necesario ingresar la fecha de la próxima reunión"/>
+                        <p:commandButton value="Añadir Participante" process="@this" onclick="PF('addParti').show()"/>
+                        <p:commandButton value="Añadir Responsabilidades" process="@this" onclick="PF('addRespon').show()"/>
+                        <p:commandButton value="Registrar Acta" actionListener="#{actaReunionBean.makeActa}" update="@this :tablaActas" onsuccess="@this.hide()"/>
+                    </p:panelGrid>
+                </h:form>
+            </p:dialog>
+            <!--Fin modal-->
+
+            <h:form>
+                <p:commandButton value="Crear Acta" process="@this" onclick="PF('crearActa').show()"/>
+            </h:form>
+            
+            <!--Tabla de acta de reuniones-->
+            <p:dataTable value="#{actaReunionBean.all}" var="acta" emptyMessage="No hay actas registradas en la base de datos" id="tablaActas">
+                <p:column style="width:16px">
+                    <p:rowToggler />
+                </p:column>
+                <p:column headerText="Codigo Acta">
+                    <p:outputLabel value="#{acta.idactaReunion}"/>
+                </p:column>
+                <p:column headerText="Fecha de Realización">
+                    <p:outputLabel value="#{acta.fecha}">
+                        <f:convertDateTime pattern="dd/MM/YYYY"/>
+                    </p:outputLabel>
+                </p:column>
+                <p:column headerText="Proyecto">
+                    <p:outputLabel value="#{acta.proyectoIdproyecto.nombre}"/>
+                </p:column>
+                <p:column style="width: 40px;">
+                    <h:form>
+                        <p:commandButton icon="fa fa-print" actionListener="#{actaReunionBean.redirecttoPrint(acta)}" process="@this"/>
+                    </h:form>
+                </p:column>
+                <p:rowExpansion>
+                    <p:panelGrid columns="2">
+                        <p:outputLabel value="Ubicacion: "/>
+                        <p:outputLabel value="#{acta.ubicacion}"/>
+                        <p:outputLabel value="Contenido: "/>
+                        <p:outputLabel value="#{acta.contenidos}"/>
+                        <p:outputLabel value="Fecha Próxima Reunión"/>
+                        <p:outputLabel value="#{acta.fechaProximaReunion}">
+                            <f:convertDateTime pattern="dd/MM/YYYY"/>
+                        </p:outputLabel>
+                    </p:panelGrid>
+                    
+                    <p:dataTable value="#{actaReunionBean.getParticipantesReunion(acta)}" var="participes" emptyMessage="No hay participantes">
+                        <f:facet name="header">
+                            Lista de Participantes del Acta de Reunión N° #{acta.idactaReunion}
+                        </f:facet>
+                        <p:column headerText="Nombre">
+                            <p:outputLabel value="#{participes.toStringAutoComplete()}"/>
+                        </p:column>
+                    </p:dataTable>
+                    
+                    <p:dataTable value="#{actaReunionBean.getCompromisosReunion(acta)}" var="comp" emptyMessage="No hay compromisos regstrados">
+                        <f:facet name="header">
+                            Compromisos del Acta de Reunión N° #{acta.idactaReunion}
+                        </f:facet>
+                        <p:column headerText="Participante">
+                            <p:outputLabel value="#{comp.participanteIdparticipante.toStringAutoComplete()}"/>
+                        </p:column>
+                        <p:column headerText="Compromiso">
+                            <p:outputLabel value="#{comp.compromiso}"/>
+                        </p:column>
+                    </p:dataTable>
+                </p:rowExpansion>
+            </p:dataTable>
+            <!--Fin de tabla-->
+        </div>
+    </h:body>
+</html>
+
