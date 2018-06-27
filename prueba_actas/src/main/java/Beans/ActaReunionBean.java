@@ -134,6 +134,27 @@ public class ActaReunionBean implements Serializable{
     }
     
     /**
+     * 
+     * Retorna los participantes que esten inscritos en el acta de acuerdo a un criterio
+     * @param query
+     * @return 
+     */
+    public List<Participante> resultdataParticipanteAutoComplete(String query){
+        List<Participante> participantes = actaReunion.getParticipanteList();
+        List<Participante> autoComplete = new ArrayList<>();
+        if (query.equals("")) {
+            return participantes;
+        } else {
+            for (Participante participante1 : participantes) {
+                if (participante1.getNombre1().startsWith(query) || participante1.getNombre1().equals(query) || participante1.getNombre2().startsWith(query) || participante1.getNombre2().equals(query) || participante1.getApellido1().startsWith(query) || participante1.getApellido1().equals(query) || participante1.getApellido2().startsWith(query) || participante1.getApellido2().equals(query)) {
+                    autoComplete.add(participante1);
+                }
+            }
+            return autoComplete;
+        }
+    }
+    
+    /**
      * Añade compromiso a acta de reunión
      */
     public void addCompromiso(){
