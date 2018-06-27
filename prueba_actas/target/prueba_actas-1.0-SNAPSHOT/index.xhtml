@@ -52,7 +52,7 @@
                     </p:column>
                 </p:dataTable>
                 <h:form>
-                    <p:commandButton value="Listo" onclick="PF('addParti').hide()" process="@this"/>
+                    <p:commandButton value="Listo" icon="fa fa-check-circle-o" onclick="PF('addParti').hide()" process="@this"/>
                 </h:form>
             </p:dialog>
             <!--Fin modal-->
@@ -83,7 +83,7 @@
                     </p:column>
                 </p:dataTable>
                 <h:form>
-                    <p:commandButton value="Listo" onclick="PF('addRespon').hide()" process="@this"/>
+                    <p:commandButton icon="fa fa-check-circle-o" value="Listo" onclick="PF('addRespon').hide()" process="@this"/>
                 </h:form>
             </p:dialog>
 
@@ -107,18 +107,18 @@
                         <p:inputTextarea id="contenidos" value="#{actaReunionBean.actaReunion.contenidos}" required="true" requiredMessage="Es necesario ingresar el contenido de la reunión"/>
                         <p:outputLabel for="fecha_proxima_reunion" value="Fecha próxima reunión: "/>
                         <p:calendar id="fecha_proxima_reunion" value="#{actaReunionBean.actaReunion.fechaProximaReunion}" required="true" requiredMessage="Es necesario ingresar la fecha de la próxima reunión"/>
-                        <p:commandButton value="Añadir Participante" process="@this" onclick="PF('addParti').show()"/>
-                        <p:commandButton value="Añadir Responsabilidades" process="@this" onclick="PF('addRespon').show()"/>
-                        <p:commandButton value="Registrar Acta" actionListener="#{actaReunionBean.makeActa}" update="@this :tablaActas" onsuccess="@this.hide()"/>
+                        <p:commandButton value="Añadir Participante" icon="fa fa-user-plus" process="@this" onclick="PF('addParti').show()"/>
+                        <p:commandButton value="Añadir Responsabilidades" icon="fa fa-check-circle" process="@this" onclick="PF('addRespon').show()"/>
+                        <p:commandButton value="Registrar Acta" icon="fa fa-folder-open" actionListener="#{actaReunionBean.makeActa}" update="@this :tablaActas" onsuccess="@this.hide()"/>
                     </p:panelGrid>
                 </h:form>
             </p:dialog>
             <!--Fin modal-->
 
             <h:form>
-                <p:commandButton value="Crear Acta" process="@this" onclick="PF('crearActa').show()"/>
+                <p:commandButton value="Crear Acta" icon="fa fa-plus-circle" process="@this" onclick="PF('crearActa').show()"/>
             </h:form>
-            
+            <br/>
             <!--Tabla de acta de reuniones-->
             <p:dataTable value="#{actaReunionBean.all}" var="acta" emptyMessage="No hay actas registradas en la base de datos" id="tablaActas">
                 <p:column style="width:16px">
