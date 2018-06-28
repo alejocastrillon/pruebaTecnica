@@ -23,6 +23,7 @@
             </h:form>
             <!--Fin Notificaciones-->
 
+            <!--Añadir Participantes-->
             <p:dialog header="Participantes" modal="true" widgetVar="addParti">
                 <h:form>
                     <p:panelGrid columns="2">
@@ -100,13 +101,13 @@
                             <p:ajax event="itemSelect" onstart="#{actaReunionBean.actaReunion.proyectoIdproyecto}"/>
                         </p:autoComplete>
                         <p:outputLabel for="fecha" value="Fecha: "/>
-                        <p:calendar value="#{actaReunionBean.actaReunion.fecha}" required="true" requiredMessage="Es necesario ingresar la fecha de realizacion del acta" id="fecha"/>
+                        <p:calendar value="#{actaReunionBean.actaReunion.fecha}" locale="es" navigator="true" maxdate="calwidget.today()" showOn="button" required="true" requiredMessage="Es necesario ingresar la fecha de realizacion del acta" id="fecha"/>
                         <p:outputLabel for="ubicacion" value="Ubicación: "/>
                         <p:inputText id="ubicacion" value="#{actaReunionBean.actaReunion.ubicacion}" required="true" requiredMessage="Es necesario ingresar la ubicación de la reunión"/>
                         <p:outputLabel for="contenidos" value="Contenidos: "/>
                         <p:inputTextarea id="contenidos" value="#{actaReunionBean.actaReunion.contenidos}" required="true" requiredMessage="Es necesario ingresar el contenido de la reunión"/>
                         <p:outputLabel for="fecha_proxima_reunion" value="Fecha próxima reunión: "/>
-                        <p:calendar id="fecha_proxima_reunion" value="#{actaReunionBean.actaReunion.fechaProximaReunion}" required="true" requiredMessage="Es necesario ingresar la fecha de la próxima reunión"/>
+                        <p:calendar id="fecha_proxima_reunion" mindate="calwidget.today()" locale="es" navigator="true" showOn="button" value="#{actaReunionBean.actaReunion.fechaProximaReunion}" required="true" requiredMessage="Es necesario ingresar la fecha de la próxima reunión"/>
                         <p:commandButton value="Añadir Participante" icon="fa fa-user-plus" process="@this" onclick="PF('addParti').show()"/>
                         <p:commandButton value="Añadir Responsabilidades" icon="fa fa-check-circle" process="@this" onclick="PF('addRespon').show()"/>
                         <p:commandButton value="Registrar Acta" icon="fa fa-folder-open" actionListener="#{actaReunionBean.makeActa}" update="@this :tablaActas" onsuccess="@this.hide()"/>
@@ -151,7 +152,7 @@
                             <f:convertDateTime pattern="dd/MM/YYYY"/>
                         </p:outputLabel>
                     </p:panelGrid>
-                    
+
                     <p:dataTable value="#{actaReunionBean.getParticipantesReunion(acta)}" var="participes" emptyMessage="No hay participantes">
                         <f:facet name="header">
                             Lista de Participantes del Acta de Reunión N° #{acta.idactaReunion}
@@ -160,7 +161,7 @@
                             <p:outputLabel value="#{participes.toStringAutoComplete()}"/>
                         </p:column>
                     </p:dataTable>
-                    
+
                     <p:dataTable value="#{actaReunionBean.getCompromisosReunion(acta)}" var="comp" emptyMessage="No hay compromisos regstrados">
                         <f:facet name="header">
                             Compromisos del Acta de Reunión N° #{acta.idactaReunion}
@@ -177,5 +178,8 @@
             <!--Fin de tabla-->
         </div>
     </h:body>
+    <script type="text/javascript">
+        PrimeFaces.locales['es'] = {closeText: 'Cerrar', prevText: 'Anterior', nextText: 'Siguiente', monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'], monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'], dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'], dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'], dayNamesMin: ['D', 'L', 'M', 'X', 'J', 'V', 'S'], weekHeader: 'Semana', firstDay: 1, isRTL: false, showMonthAfterYear: false, yearSuffix: '', timeOnlyTitle: 'Sólo hora', timeText: 'Tiempo', hourText: 'Hora', minuteText: 'Minuto', secondText: 'Segundo', currentText: 'Fecha actual', ampm: false, month: 'Mes', week: 'Semana', day: 'Día', allDayText: 'Todo el día'};
+    </script>
 </html>
 
